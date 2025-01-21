@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Room
-
+from .forms import RoomForm
 
 
 def home(request):
@@ -10,10 +10,16 @@ def home(request):
   return render(request,'roots/home.html', contest)
   
 def room(request, pk):
-  room = None
-  for i in rooms:
-    if i['id'] == int(pk):
-      room = i
-      contest = {'room': room}
-    return render(request, 'roots/room.html', contest)
+  rooms = Room.objects.get(id=pk)
+  contest = {'room': room}
+  return render(request, 'roots/room.html', contest)
 # Create your views here.
+def createRoom(request):
+  form = RoomForm()
+  if request.method == 'POST':
+    form = RoomForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return redirect('home')
+  contest = {'form': form}
+  return render(request, 'roots/room_form.html', contest)
