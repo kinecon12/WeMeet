@@ -34,3 +34,11 @@ def updateRoom(request, pk):
       return redirect('home')
   contest = {'form': form}
   return render(request, 'roots/room_form.html', contest)
+
+def deleteRoom(request, pk):
+  room = Room.objects.get(id=pk)
+  if request.method == 'POST':
+    room.delete()
+    return redirect('home')
+  contest = {'obj': room}
+  return render(request, 'roots/delete.html', contest)
