@@ -15,8 +15,15 @@
   <div>
     <h3>Browse Topics</h3>
     <hr>
+    
+    {% for topic in topics  %}
+      <div>
+        <a href="{% url 'home' %}?q= ALL">{{topic.name}}</a>
+      </div>
+    {% endfor %}
+      
   </div>
-  
+
   <div>
     <a href="{% url 'create-room' %}">create Room</a>
   <div>
