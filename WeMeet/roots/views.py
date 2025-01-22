@@ -62,7 +62,8 @@ def home(request):
   
 def room(request, pk):
   rooms = Room.objects.get(id=pk)
-  contest = {'room': room}
+  room_messages = rooms.message_set.all()
+  contest = {'room': room, 'room_messages': room_messages}
   return render(request, 'roots/room.html', contest)
 
 @login_required(login_url= 'login')
