@@ -57,22 +57,25 @@ def home(request):
   rooms = Room.objects.filter(Q(topic__name__icontains=q) | Q(description__icontains=q) | Q(name__icontains=q))
   topics = Topic.objects.all()
   room_count = rooms.count()
-  contest = {'rooms': rooms, 'topics': topics, 'room_count': room_count}
+  room_messages = Message.objects.all()
+  
+  
+  contest = {'rooms': rooms, 'topics': topics, 'room_count': room_count, 'room_messages': room_messages}
   return render(request,'roots/home.html', contest)
   
 def room(request, pk):
   rooms = Room.objects.get(id=pk)
-  room_messages = rooms.message_set.all().order_by('-created')
-  
+  room_messages = rooms.message_set.all()
+  participants = rooms.participants.all()
   if request.method == 'POST':
     message = Message.objects.create(
       user=request.user, 
       room=rooms, 
       body=request.POST.get('body')
       )
-    
+    rooms.participants.add(request.user)
     return redirect('room', pk=pk)
-  contest = {'room': room, 'room_messages': room_messages}
+  contest = {'room': room, 'room_messages': room_messages, 'participants': participants}
   return render(request, 'roots/room.html', contest)
 
 @login_required(login_url= 'login')
@@ -113,4 +116,17 @@ def deleteRoom(request, pk):
     room.delete()
     return redirect('home')
   contest = {'obj': room}
+  return render(request, 'roots/delete.html', contest)
+
+@login_required(login_url= 'login')
+def deletemessage(request, pk):
+  message = Message.objects.get(id=pk)
+  
+  if request.user != message.user:
+    return HttpResponse('You are not allowed')
+  
+  if request.method == 'POST':
+    messages.delete()
+    return redirect('home')
+  contest = {'obj': message}
   return render(request, 'roots/delete.html', contest)
