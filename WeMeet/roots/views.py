@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .forms import RoomForm
 
 def loginPage(request):
@@ -62,7 +62,16 @@ def home(request):
   
 def room(request, pk):
   rooms = Room.objects.get(id=pk)
-  room_messages = rooms.message_set.all()
+  room_messages = rooms.message_set.all().order_by('-created')
+  
+  if request.method == 'POST':
+    message = Message.objects.create(
+      user=request.user, 
+      room=rooms, 
+      body=request.POST.get('body')
+      )
+    
+    return redirect('room', pk=pk)
   contest = {'room': room, 'room_messages': room_messages}
   return render(request, 'roots/room.html', contest)
 
