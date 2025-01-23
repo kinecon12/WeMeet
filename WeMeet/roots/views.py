@@ -78,6 +78,14 @@ def room(request, pk):
   contest = {'room': room, 'room_messages': room_messages, 'participants': participants}
   return render(request, 'roots/room.html', contest)
 
+def userProfile(request, pk):
+  user = User.objects.get(id=pk)
+  rooms = user.room_set.all()
+  room_messages = user.message_set.all()
+  topics = Topic.objects.all()
+  contest = {'user': user, 'rooms': rooms, 'room_messages' : room_messages, 'topics' : topics }
+  return render(request, 'roots/profile.html', contest)
+
 @login_required(login_url= 'login')
 def createRoom(request):
   form = RoomForm()
