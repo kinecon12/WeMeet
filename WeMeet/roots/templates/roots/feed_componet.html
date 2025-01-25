@@ -5,14 +5,14 @@
       <div class="avatar avatar--small">
         <img src="https://randomuser.me/api/portraits/women/11.jpg" />
       </div>
-      <span>@{{room.host.username}}</span>
+      <span>@{{room.host}}</span>
     </a>
     <div class="roomListRoom__actions">
       <span>{{room.created|timesince}} ago</span>
     </div>
   </div>
   <div class="roomListRoom__content">
-    <a href="{% url 'room' room.id %}">J{{room.name}}</a>
+    <a href="{% url 'room' room.id %}">{{room.name}}</a>
   
   </div>
   <div class="roomListRoom__meta">

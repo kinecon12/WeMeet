@@ -64,17 +64,17 @@ def home(request):
   return render(request,'roots/home.html', contest)
   
 def room(request, pk):
-  rooms = Room.objects.get(id=pk)
-  room_messages = rooms.message_set.all()
-  participants = rooms.participants.all()
+  room = Room.objects.get(id=pk)
+  room_messages = room.message_set.all()
+  participants = room.participants.all()
   if request.method == 'POST':
     message = Message.objects.create(
       user=request.user, 
-      room=rooms, 
+      room=room, 
       body=request.POST.get('body')
       )
-    rooms.participants.add(request.user)
-    return redirect('room', pk=pk)
+    room.participants.add(request.user)
+    return redirect('room', id=pk)
   contest = {'room': room, 'room_messages': room_messages, 'participants': participants}
   return render(request, 'roots/room.html', contest)
 
