@@ -89,6 +89,7 @@ def userProfile(request, pk):
 @login_required(login_url= 'login')
 def createRoom(request):
   form = RoomForm()
+  topics = Topic.objects.all()
   if request.method == 'POST':
     form = RoomForm(request.POST)
     if form.is_valid():
@@ -96,14 +97,14 @@ def createRoom(request):
       room.host = request.user
       room.save()
       return redirect('home')
-  contest = {'form': form}
+  contest = {'form': form, 'topics': topics}
   return render(request, 'roots/room_form.html', contest)
 
 @login_required(login_url= 'login')
 def updateRoom(request, pk):
   room = Room.objects.get(id=pk)
   form = RoomForm(instance=room)
-  
+  topics = Topic.objects.all()
   if request.user != room.host:
     return HttpResponse('You are not allowed')
   
@@ -112,7 +113,7 @@ def updateRoom(request, pk):
     if form.is_valid():
       form.save()
       return redirect('home')
-  contest = {'form': form}
+  contest = {'form': form, 'topics': topics}
   return render(request, 'roots/room_form.html', contest)
 
 @login_required(login_url= 'login')
