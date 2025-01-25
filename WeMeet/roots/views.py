@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from .models import Room, Topic, Message
-from .forms import RoomForm
+from .forms import RoomForm, Userfrom
 
 def loginPage(request):
   page = 'login'
@@ -151,5 +151,6 @@ def deletemessage(request, pk):
 
 @login_required(login_url='login')
 def updateUser(request):
-  contest = {}
+  form = Userfrom(instance=User)
+  contest = {'form': form}
   return render(request, 'roots/update_user.html', contest)
