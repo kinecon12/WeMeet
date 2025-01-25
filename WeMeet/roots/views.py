@@ -148,3 +148,8 @@ def deletemessage(request, pk):
     return redirect('home')
   contest = {'obj': message}
   return render(request, 'roots/delete.html', contest)
+
+@login_required(login_url='login')
+def updateUser(request):
+  contest = {}
+  return render(request, 'roots/update_user.html', contest)
