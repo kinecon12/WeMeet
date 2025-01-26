@@ -2,7 +2,7 @@
 Alx portfolio Project
 
 
-# StudyBuddy
+# WeMeet
 </div>
 
 ### Cloning the repository
